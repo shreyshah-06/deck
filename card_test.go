@@ -56,13 +56,27 @@ func TestSort(t *testing.T){
 	}
 }
 
-func TestShuffle(t *testing.T){
-	cards := New()
-	shuffled := Shuffle(cards)
-	// fmt.Println(cards)
-	// fmt.Println(shuffled)
-	if len(cards) != len(shuffled){
-		t.Error("Expected the same number of cards before and after shuffle")
+func TestJokers(t *testing.T){
+	cards := New(Jokers(3))
+	count := 0
+	for _, card := range cards{
+		if card.Suit == Joker{
+			count++
+		}
+	}
+	if count != 3{
+		t.Error("Expected 3 Jokers but got", count)
 	}
 }
 
+func TestFilter(t *testing.T){
+	filter := func(card Card) bool{
+		return card.Rank == Two || card.Rank == Three
+	}
+	cards := New(Filter(filter))
+	for _, card := range cards{
+		if card.Rank == Two || card.Rank == Three{
+			t.Error("Expected all 2s and 3s to be filtered out")
+		}
+	}
+}
